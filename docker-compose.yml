@@ -1,0 +1,50 @@
+version: '3'
+services:
+  cassandra1:
+    image: cassandra:latest
+    container_name: cassandra1
+    ports:
+      - "9042:9042"
+      - "7000:7000"
+    environment:
+      - CASSANDRA_SEEDS=cassandra1
+## Эти конфиги переносятся в cassandra.yml в контейнере и должны помочь с удалённым доступом через cqlsh но на данном этапе 
+## возникает пока необъяснимая ошибка: 
+##"If rpc_address is set to a wildcard address (0.0.0.0), 
+## then you must set broadcast_rpc_address to a value other than"
+   #   - start_rpc=true
+  #    - rpc_address=0.0.0.0
+ #     - broadcast_rpc_address=192.168.1.200
+#      - listen_address=192.168.1.200
+    networks:
+      CASnetwork:
+        ipv4_address: 192.168.1.200
+  cassandra2:
+    image: cassandra:latest
+    container_name: cassandra2
+    ports:
+      - "9043:9042"
+    environment:
+      - CASSANDRA_SEEDS=cassandra1
+    networks:
+      - CASnetwork:
+          ipv4_address: 192.168.1.201
+  cassandra3:
+    image: cassandra:latest
+    container_name: cassandra3
+    ports:
+      - "9044:9042"
+    environment:
+      - CASSANDRA_SEEDS=cassandra1
+    networks:
+      - CASnetwork:
+          ipv4_address: 192.168.1.202
+networks:
+  CASnetwork:
+    external: true ## Указывает что использовать надо зараннее созданную сеть
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 192.168.1.197/28
+        gateway: 192.168.1.198
+
