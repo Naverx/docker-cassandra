@@ -1,5 +1,6 @@
 # docker-cassandra
 Открытие портов:
+
 /home/psyop/.bash_history:sudo ufw allow 9042/tcp
 
 /home/psyop/.bash_history:sudo ufw allow 9043/tcp
@@ -7,7 +8,7 @@
 /home/psyop/.bash_history:sudo ufw allow 9044/tcp
 
 
-создание сети
+создание сети:
 
 docker network create --gateway 192.168.1.198 --subnet 192.168.1.197/28 CASnetwork
 
