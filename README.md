@@ -1,32 +1,32 @@
 # docker-cassandra
 Открытие портов:
+>/home/psyop/.bash_history:sudo ufw allow 9042/tcp
 
-/home/psyop/.bash_history:sudo ufw allow 9042/tcp
+>/home/psyop/.bash_history:sudo ufw allow 9043/tcp
 
-/home/psyop/.bash_history:sudo ufw allow 9043/tcp
+>/home/psyop/.bash_history:sudo ufw allow 9044/tcp
 
-/home/psyop/.bash_history:sudo ufw allow 9044/tcp
+Ставлю айпи адреса и шлюзы на обеих машинах:
 
+![1](https://github.com/Naverx/docker-cassandra/assets/14109161/e9bf2851-70cb-4ec5-8914-71fc1aa387c8)
+![2](https://github.com/Naverx/docker-cassandra/assets/14109161/2561af93-47c6-45f1-a2c4-80070ca8cc04)
 
 создание сети:
+> docker network create -d macvlan --subnet 192.168.1.197/28 --gateway 192.168.1.199 --ip-range 192.168.1.200/30 -o parent=enp0s8 CASnet
 
-docker network create --gateway 192.168.1.198 --subnet 192.168.1.197/28 CASnetwork
+Где gateway это шлюз сети в которой находится vm, а enp0s8 это название её интерфейса(macvlan присоединяется к сети хоста, а ip range это диапазон адресов для докер контейнеров):
+![image](https://github.com/Naverx/docker-cassandra/assets/14109161/d1422084-af7f-46e6-bbb6-da8abe4692e1)
 
-Запуск контейнеров с кассандрой по очереди
+Запуск контейнеров с кассандрой по очереди. Между запусками должна пауза около минуты, это можно автоматизировать с помощью entrypoint
 
-docker-compose -f docker-compose.yml up cassandra1 -d
+>docker-compose -f docker-compose.yml up cassandra1 -d
 
-docker-compose -f docker-compose.yml up cassandra2 -d
+>docker-compose -f docker-compose.yml up cassandra2 -d
 
-docker-compose -f docker-compose.yml up cassandra3 -d
-
-Нетворки и контейнеры:
-![image](https://github.com/Naverx/docker-cassandra/assets/14109161/323dfa0e-9946-433c-a15e-567848f95fbf)
+>docker-compose -f docker-compose.yml up cassandra3 -d
 
 
-Подключаюсь с cqlsh с удалённого хоста до каждого из контейнеров по адресу самой машины с докером + проброшенного порта 9042, 9043, 9044
-![image](https://github.com/Naverx/docker-cassandra/assets/14109161/4cc2cfa0-3761-4b32-83a6-6301c5732b4e)
+Подключаюсь с cqlsh с удалённого хоста до каждого из контейнеров по адресам 192.168.1.200-202
+![2](https://github.com/Naverx/docker-cassandra/assets/14109161/a77e41fc-afb0-4435-9495-51bb10712fb7)
 
-Но c основной машины получается подключаться и по статичному IP контейнеров
-![image](https://github.com/Naverx/docker-cassandra/assets/14109161/fced0ad3-d94d-489d-b554-fc362634d599)
 
