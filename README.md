@@ -1,10 +1,10 @@
 # docker-cassandra
 Открытие портов:
->/home/psyop/.bash_history:sudo ufw allow 9042/tcp
+>sudo ufw allow 9042/tcp
 
->/home/psyop/.bash_history:sudo ufw allow 9043/tcp
+>sudo ufw allow 9043/tcp
 
->/home/psyop/.bash_history:sudo ufw allow 9044/tcp
+>sudo ufw allow 9044/tcp
 
 Ставлю айпи адреса и шлюзы на обеих машинах:
 
